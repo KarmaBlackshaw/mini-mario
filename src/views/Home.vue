@@ -169,7 +169,10 @@ export default {
     vivus: null,
 
     time: 5,
-    history: []
+    history: [],
+    config: {
+      timeDuration: 7
+    }
   }),
 
   computed: {
@@ -196,12 +199,12 @@ export default {
 
   created() {
     this.setData()
-    // setInterval(() => {
-    //   this.time -= 1
-    //   if (this.time === 0) {
-    //     this.startAnimation()
-    //   }
-    // }, 1000)
+    setInterval(() => {
+      this.time -= 1
+      if (this.time === 0) {
+        this.startAnimation()
+      }
+    }, 1000)
   },
 
   methods: {
@@ -256,7 +259,7 @@ export default {
           this.setData()
           this.isPlaying = false
           this.svgKey++
-          this.time = 5
+          this.time = this.config.timeDuration
         }
       )
     }

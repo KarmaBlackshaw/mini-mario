@@ -44,18 +44,18 @@
       </div>
       <div class="main__bet-container">
         <div class="bet__buttons-container">
-          <button class="bet__buttons">Left</button>
-          <button class="bet__buttons">Right</button>
-          <button class="bet__buttons">4</button>
-          <button class="bet__buttons">3</button>
-          <button class="bet__buttons">START</button>
+          <button class="bet__button">Left</button>
+          <button class="bet__button">Right</button>
+          <button class="bet__button">4</button>
+          <button class="bet__button">3</button>
+          <button class="bet__button-start">START</button>
         </div>
         <div class="bet__progress-container">
           <div class="bet-title">Lorem Ipsum</div>
           <div class="progress-container">
             <div class="progress-title">1 v 2</div>
             <div class="progress-bar progress-1"></div>
-            <div class="progress-bar progress-1"></div>
+            <div class="progress-bar progress-2"></div>
           </div>
           <div class="progress-container">
             <div class="progress-title">3 v 4</div>
@@ -213,6 +213,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+@mixin tablet {
+  @media screen and (min-width: 420px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media screen and (min-width: 1200px) {
+    @content;
+  }
+}
+
+// Markup Styles
 .mario-ladder {
   background: rgb(242, 255, 194);
   display: block;
@@ -223,7 +237,7 @@ export default {
   box-sizing: border-box;
 
   button {
-    border-radius: 15px;
+    border-radius: 10px;
     padding: 5px 10px;
     outline: none;
     border: none;
@@ -263,6 +277,14 @@ export default {
       svg {
         max-height: 450px;
         max-width: 100%;
+
+        @include tablet {
+          max-height: 300px;
+        };
+
+        @include tablet {
+          max-height: 700px;
+        };
       }
     }
 
@@ -277,7 +299,7 @@ export default {
         background: rgba(0,0,0,0.8);
         margin-bottom: 5px;
 
-        .bet__buttons {
+        .bet__button {
           width: 100%;
           text-transform: uppercase;
 
@@ -323,6 +345,8 @@ export default {
         color: white;
         background: rgba(0,0,0,0.8);
         padding: 10px;
+        height: 100%;
+        overflow-y: auto;
 
         .history-title {
           font-size: 1.2rem;
@@ -341,12 +365,116 @@ export default {
     background: rgb(160, 155, 155);
     padding: 10px;
     text-align: right;
+  }
+}
 
-    button {
-     border-radius: 15px;
-     padding: 5px 10px;
-     outline: none;
-     border: none;
+
+// Grid Support
+@supports(display: grid) {
+  @include tablet {
+    .mario-ladder {
+      display: grid;
+			grid-template-columns: 1fr 1fr 1fr;
+			grid-template-rows: auto auto 5fr auto;
+      grid-template-areas:
+        "audio audio audio"
+        "title title title"
+        "main main main"
+        "footer footer footer";
+    }
+
+    .audio-container {
+      grid-area: audio;
+    }
+
+    .title-container {
+      grid-area: title;
+    }
+
+    .main-container {
+      grid-area: main;
+      display: grid;
+			grid-template-columns: 1fr 1fr;
+			grid-template-rows: auto auto ;
+      grid-template-areas: 
+        "game game"
+        "bet history";
+
+      .main__game-container {
+        grid-area: game;
+      }
+
+      .main__bet-container {
+        grid-area: bet;
+
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+        grid-row-gap: 20px;
+        grid-template-areas: 
+          "buttonsArea"
+          "progressArea";
+
+        .bet__buttons-container {
+          grid-area: buttonsArea;
+
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: 1fr 1fr 1fr;
+          grid-gap: 3px;
+          grid-template-areas: 
+            "controlButton controlButton"
+            "controlButton controlButton"
+            "start start";
+
+          .bet__button-start {
+            grid-area: start;
+          }
+        }
+
+        .bet__progress-container {
+          grid-area: progressArea;
+
+          .progress-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-gap: 10px;
+            grid-template-areas: 
+              "title title"
+              "progressBar1 progressBar2";
+
+              .progress-title {
+                grid-area: title;
+              }
+
+              .progress-bar {
+                &.progress-1 {
+                  grid-area: progressBar1;
+                }
+                &.progress-2 {
+                  grid-area: progressBar2;
+                }
+              }
+          }
+        }
+      }
+
+      .main__history-container {
+        grid-area: history;
+      }
+    }
+
+    .footer-container {
+      grid-area: footer;
+    }
+  }
+
+  @media screen and (min-width: 1200px) {
+    .mario-ladder {
+			.main-container {
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-areas: "bet game history";
+      }
     }
   }
 }
