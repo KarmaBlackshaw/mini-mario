@@ -68,7 +68,7 @@
       <div class="game-content">
         <img src="@/assets/title.png" class="game-title" alt="" />
         <div class="loading-container" v-if="!isPlaying">
-          <img src="@/assets//loading.gif" class="loading-img" alt="" />
+          <img src="@/assets/loading.gif" class="loading-img" alt="" />
           <div class="loading-text">{{ time }}</div>
         </div>
         <svg viewBox="0 0 249.8 423.35" class="svg" id="svg" :key="svgKey">
@@ -196,12 +196,12 @@ export default {
 
   created() {
     this.setData()
-    setInterval(() => {
-      this.time -= 1
-      if (this.time === 0) {
-        this.startAnimation()
-      }
-    }, 1000)
+    // setInterval(() => {
+    //   this.time -= 1
+    //   if (this.time === 0) {
+    //     this.startAnimation()
+    //   }
+    // }, 1000)
   },
 
   methods: {
@@ -264,11 +264,8 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @keyframes load {
-  from {
-    width: 0;
-  }
   to {
     width: 100%;
   }
@@ -282,32 +279,55 @@ export default {
 }
 
 @mixin mobile {
-  @media (max-width: 640px) {
+  @media screen and (max-width: 480px) {
     @content;
   }
 }
 
-.hidden {
-  visibility: hidden;
+@mixin tablet {
+  @media screen and (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media screen and (min-width: 769px) {
+    @content;
+  }
 }
 
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 $game-height: 700px;
 
 .mario-ladder {
   margin: auto;
-  display: flex;
-  height: $game-height;
-  width: 70%;
-  background-color: #ffeaa7;
+  // display: flex;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  justify-items: center;
+
+  height: 100%;
+  width: 80%;
   background-image: url("../assets/background.png");
   background-position: center center;
   background-repeat: no-repeat;
   background-size: 100% 100%;
+
+  @include tablet {
+    width: 90%;
+    background-size: cover;
+  }
+
+  @include mobile {
+    width: 100%;
+    height: 100vh;
+    background: #ffeaa7;
+  }
 
   & > * {
     // border: 1px solid #000;
@@ -316,8 +336,16 @@ $game-height: 700px;
   }
 
   .betting-container {
-    flex: 1;
+    // flex: 1;
     position: relative;
+
+    @include mobile {
+      // display: none;
+      grid-column: 1/4;
+      grid-row: 2/3;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
 
     & > * {
       width: 90%;
@@ -325,6 +353,12 @@ $game-height: 700px;
       border: 1px solid #000;
       padding: 20px 10px;
       margin: 0 auto;
+
+      @include mobile {
+        width: 80%;
+        height: auto;
+        padding: 10px 5px;
+      }
     }
 
     .betting-buttons-container {
@@ -332,6 +366,12 @@ $game-height: 700px;
       grid-template-columns: 1fr 1fr;
       grid-column-gap: 5px;
       margin-top: 60px;
+
+      @include mobile {
+        margin-top: 0;
+        height: 100%;
+        // display: none;
+      }
 
       button {
         margin: 2px;
@@ -374,10 +414,13 @@ $game-height: 700px;
     .betting-box {
       color: rgb(248, 255, 151);
       text-align: center;
-      position: absolute;
-      bottom: 60px;
-      left: 50%;
-      transform: translateX(-50%);
+
+      @include desktop {
+        position: absolute;
+        bottom: 60px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
 
       .betting-box__title {
         font-size: 1.5rem;
@@ -456,18 +499,27 @@ $game-height: 700px;
   }
 
   .game-container {
-    flex: 1.5;
+    @include mobile {
+      width: 100vw;
+    }
 
     .loading-container {
       position: absolute;
       top: 55%;
       left: 50%;
       transform: translate(-50%, -50%);
-      // z-index: 1;
-      // text-align: center;
-      // display: flex;
-      // flex-direction: column;
-      // justify-content: center;
+
+      @include mobile {
+        left: 51%;
+      }
+
+      @include mobile {
+        width: 70%;
+      }
+
+      .loading-img {
+        width: 100%;
+      }
 
       .loading-text {
         position: absolute;
@@ -479,6 +531,10 @@ $game-height: 700px;
         font-weight: bold;
         margin: 0 10%;
         width: 80%;
+
+        @include mobile {
+          height: 40px;
+        }
       }
     }
 
@@ -494,14 +550,23 @@ $game-height: 700px;
 
       .svg {
         height: 100%;
-        max-width: 276px;
+        width: 280px;
+        padding-right: 5px;
+
+        @include mobile {
+          width: 300px;
+        }
       }
     }
   }
 
   .history-container {
-    flex: 1;
+    // flex: 1;
     position: relative;
+
+    @include mobile {
+      display: none;
+    }
 
     .history-box {
       color: rgb(248, 255, 151);
